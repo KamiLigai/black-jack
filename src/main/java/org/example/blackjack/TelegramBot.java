@@ -1,6 +1,6 @@
 package org.example.blackjack;
 
-import org.example.blackjack.telegram_bot.BlackJack;
+import org.example.blackjack.telegrambot.BlackJack;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -10,7 +10,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.HashMap;
 import java.util.Map;
 
+// Уберите @Slf4j полностью, добавьте явное указание логгера
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TelegramBot extends TelegramLongPollingBot {
+
+    private static final Logger logger = LoggerFactory.getLogger(TelegramBot.class);
 
     private static final String TOKEN = "7786403468:AAEwhrybrtlTXhEj0fbC94-mxMQP_-BaSUc";
     private static final String USERNAME = "ncrp_blue_eyes_bot";
@@ -37,7 +43,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             String userMessage = update.getMessage().getText().toLowerCase();
             String botResponse;
 
-            //Новый пользователь. Todo 2 человека
             BlackJack game = userGames.computeIfAbsent(chatId, k -> new BlackJack());
 
             switch (userMessage) {
@@ -74,7 +79,15 @@ public class TelegramBot extends TelegramLongPollingBot {
                 SendMessage message = new SendMessage(chatId, botResponse);
                 execute(message);
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                logger.error("Ошибка при отправке сообщения в чат ID: {}. Текст сообщения: '{}'", chatId, botResponse, e);
+
+                try {
+                    SendMessage errorMessage = new SendMessage(chatId, "Произошла ошибка при обработке команды. Попробуйте позже.");
+                    execute(errorMessage);
+
+                } catch (TelegramApiException nestedException) {
+                    logger.error("Ошибка при отправке сообщения об ошибке в чат ID: {}", chatId, nestedException);
+                }
             }
         }
     }

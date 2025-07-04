@@ -1,4 +1,4 @@
-package org.example.blackjack.black_jack;
+package org.example.blackjack.blackjack;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,19 +10,19 @@ import java.util.List;
 public class Card implements Cloneable {
     public final static String CARD_BACK = "|??| ";
     private final Suit suit;
-    private final Rank deck;
+    private final Rank rank;
     private final String text;
     private volatile int value;
 
-    public Card(Suit suit, Rank deck) {
+    public Card(Suit suit, Rank rank) {
         this.suit = suit;
-        this.deck = deck;
-        this.text = "|" + suit.getValue() + deck.getValue() + "| ";
-        this.value = getValueByRank(deck);
+        this.rank = rank;
+        this.text = "|" + suit.getValue() + rank.getValue() + "| ";
+        this.value = getValueByRank(rank);
     }
 
-    public int getValueByRank(Rank deck) {
-        switch (deck) {
+    public int getValueByRank(Rank rank) {
+        switch (rank) {
             case ACE:
                 return 11;
             case TWO:

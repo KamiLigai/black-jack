@@ -1,7 +1,7 @@
-package org.example.blackjack.telegram_bot;
+package org.example.blackjack.telegrambot;
 
-import org.example.blackjack.black_jack.Card;
-import org.example.blackjack.black_jack.Deck;
+import org.example.blackjack.blackjack.Card;
+import org.example.blackjack.blackjack.Deck;
 
 import java.util.ArrayList;
 import java.util.List;

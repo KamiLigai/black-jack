@@ -1,4 +1,4 @@
-package org.example.blackjack.telegram_bot;
+package org.example.blackjack.telegrambot;
 
 import org.example.blackjack.TelegramBot;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         DefaultBotOptions botOptions = new DefaultBotOptions();
 
-        TelegramBotsApi botsApi = null;
+        TelegramBotsApi botsApi;
 
         try {
             botsApi = new TelegramBotsApi(DefaultBotSession.class);
