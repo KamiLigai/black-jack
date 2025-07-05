@@ -143,4 +143,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         if (playerScore < dealerScore) return res + "Ты проиграл!";
         return res + "Ничья!";
     }
+
+    public void sendPacthNoteToUser(Long chatId, String text) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId.toString());
+        message.setText(text);
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 }
