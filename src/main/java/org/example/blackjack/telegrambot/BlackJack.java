@@ -20,7 +20,6 @@ public class BlackJack {
         return gameOver;
     }
 
-    // Начать новую партию
     public void startNewGame() {
         deck = new Deck();
         deck.shuffle();
@@ -34,53 +33,52 @@ public class BlackJack {
         dealerHand.add(deck.draw());
     }
 
-    // Игрок берет карту
-    public String playerHit() {
+    public boolean playerHit() {
         if (gameOver) {
-            return "Партия окончена. Начни новую!";
+            return false;
         }
-
         playerHand.add(deck.draw());
-
-        return checkForResult();
+        if (isPlayerBust()) {
+            gameOver = true;
+        }
+        return true;
     }
 
-    // Игрок завершает ход, дилер доигрывает
-    public String playerStand() {
+    public boolean playerStand() {
         if (gameOver) {
-            return "Партия окончена. Начни новую!";
+            return false;
         }
 
-        // Дилер ходит
         while (Card.sumOfCards(dealerHand) < 17) {
             dealerHand.add(deck.draw());
         }
 
         gameOver = true;
-        return getGameResult();
+        return true;
     }
 
-    private String checkForResult() {
-        int score = Card.sumOfCards(playerHand);
-        if (score >= 21) {
-            gameOver = true;
-            return getGameResult();
-        }
-        return "Ты взял карту: " + lastCardToString(playerHand) + "\nРука: " + handToString(playerHand);
+    public int getPlayerScore() {
+        return Card.sumOfCards(playerHand);
     }
 
-    private String getGameResult() {
-        int playerScore = Card.sumOfCards(playerHand);
-        int dealerScore = Card.sumOfCards(dealerHand);
+    public int getDealerScore() {
+        return Card.sumOfCards(dealerHand);
+    }
 
-        String res = "Ваши карты: " + handToString(playerHand) + " (" + playerScore + ")\n" +
-            "Карты дилера: " + handToString(dealerHand) + " (" + dealerScore + ")\n";
+    public boolean isPlayerBust() {
+        return getPlayerScore() > 21;
+    }
 
-        if (playerScore > 21) return res + "Ты проиграл (перебор)!";
-        if (dealerScore > 21) return res + "Дилер перебрал, ты выиграл!";
-        if (playerScore > dealerScore) return res + "Ты выиграл!";
-        if (playerScore < dealerScore) return res + "Ты проиграл!";
-        return res + "Ничья!";
+    public boolean isDealerBust() {
+        return getDealerScore() > 21;
+    }
+
+    public String playerHandToString() {
+        return handToString(playerHand);
+    }
+
+    public String dealerHandToString() {
+        return handToString(dealerHand);
     }
 
     private String handToString(List<Card> hand) {
@@ -91,11 +89,7 @@ public class BlackJack {
         return sb.toString().trim();
     }
 
-    private String lastCardToString(List<Card> hand) {
-        return hand.isEmpty() ? "" : hand.get(hand.size() - 1).toString();
-    }
-
-    public String playerHandToString() {
-        return handToString(playerHand);
+    public String lastCardToString() {
+        return playerHand.isEmpty() ? "" : playerHand.get(playerHand.size() - 1).toString();
     }
 }
