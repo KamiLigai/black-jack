@@ -19,7 +19,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     private static final String TOKEN = "7786403468:AAEwhrybrtlTXhEj0fbC94-mxMQP_-BaSUc";
     private static final String USERNAME = "ncrp_blue_eyes_bot";
 
-    private Map<String, BlackJack> userGames = new HashMap<>();
+    private final Map<String, BlackJack> userGames = new HashMap<>();
 
     public TelegramBot(DefaultBotOptions options) {
         super(options);
@@ -35,17 +35,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         return USERNAME;
     }
 
-    // Основной метод обработки обновлений от Telegram
     @Override
     public void onUpdateReceived(Update update) {
-        // Проверка наличия текстового сообщения
         if (update.getMessage() != null && update.getMessage().hasText()) {
-            // Извлечение идентификатора чата и текста сообщения
             String chatId = update.getMessage().getChatId().toString();
             String userMessage = update.getMessage().getText().toLowerCase();
             String botResponse;
-
-            // Получение игры пользователя или создание новой, если её нет
             BlackJack game = userGames.computeIfAbsent(chatId, k -> new BlackJack());
 
             switch (userMessage) {
@@ -116,7 +111,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 logger.error("Ошибка при отправке сообщения в чат ID: {}. Текст сообщения: '{}'", chatId, botResponse, e);
 
                 try {
-                    // Отправка сообщения об ошибке пользователю
                     SendMessage errorMessage = new SendMessage(chatId, "Произошла ошибка при обработке команды. Попробуйте позже.");
                     execute(errorMessage);
 
@@ -127,16 +121,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    // Метод для получения результата игры
     private String getGameResult(BlackJack game) {
         int playerScore = game.getPlayerScore();
         int dealerScore = game.getDealerScore();
-
-        // Формирование результата с текущими картами и счетами игрока и дилера
         String res = "Ваши карты: " + game.playerHandToString() + " (" + playerScore + ")\n" +
             "Карты дилера: " + game.dealerHandToString() + " (" + dealerScore + ")\n";
-
-        // Определение победителя или ничьей
         if (game.isPlayerBust()) return res + "Ты проиграл (перебор)!";
         if (game.isDealerBust()) return res + "Дилер перебрал, ты выиграл!";
         if (playerScore > dealerScore) return res + "Ты выиграл!";

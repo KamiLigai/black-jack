@@ -8,7 +8,7 @@
         <version>3.5.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.example</groupId>
+    <groupId>ru.kligai</groupId>
     <artifactId>black-jack</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>black-jack</name>

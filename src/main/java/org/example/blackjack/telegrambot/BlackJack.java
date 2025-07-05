@@ -49,7 +49,7 @@ public class BlackJack {
             return false;
         }
 
-        while (Card.sumOfCards(dealerHand) < 17) {
+        while (getHandValue(dealerHand) < 17) {
             dealerHand.add(deck.draw());
         }
 
@@ -58,11 +58,11 @@ public class BlackJack {
     }
 
     public int getPlayerScore() {
-        return Card.sumOfCards(playerHand);
+        return getHandValue(playerHand);
     }
 
     public int getDealerScore() {
-        return Card.sumOfCards(dealerHand);
+        return getHandValue(dealerHand);
     }
 
     public boolean isPlayerBust() {
@@ -91,5 +91,35 @@ public class BlackJack {
 
     public String lastCardToString() {
         return playerHand.isEmpty() ? "" : playerHand.get(playerHand.size() - 1).toString();
+    }
+
+    private int getHandValue(List<Card> hand) {
+        int sum = 0;
+        int acesCount = 0;
+
+        for (Card c : hand) {
+            switch (c.rank()) {
+                case ACE -> {
+                    sum += 11;
+                    acesCount++;
+                }
+                case TWO -> sum += 2;
+                case THREE -> sum += 3;
+                case FOUR -> sum += 4;
+                case FIVE -> sum += 5;
+                case SIX -> sum += 6;
+                case SEVEN -> sum += 7;
+                case EIGHT -> sum += 8;
+                case NINE -> sum += 9;
+                case TEN, JACK, QUEUE, KING -> sum += 10;
+            }
+        }
+
+        while (sum > 21 && acesCount > 0) {
+            sum -= 10;
+            acesCount--;
+        }
+
+        return sum;
     }
 }
