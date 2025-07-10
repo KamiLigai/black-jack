@@ -1,4 +1,4 @@
-package org.example.blackjack.black_jack;
+package org.example.blackjack.blackjack;
 
 public enum Rank {
     ACE("A"), TWO("2"), THREE("3"),

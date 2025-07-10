@@ -1,4 +1,4 @@
-package org.example.blackjack.black_jack;
+package org.example.blackjack.blackjack;
 
 import java.util.ArrayList;
 import java.util.Collections;
